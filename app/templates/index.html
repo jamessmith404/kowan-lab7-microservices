@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geometry Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <!-- Square Area Calculator -->
+        <div class="calculator mb-6">
+            <h2 class="text-2xl font-bold mb-4 text-gray-700">Square Area Calculator</h2>
+            <div class="flex items-center mb-2">
+                <input type="number" id="squareSide" placeholder="Enter side length" class="border border-gray-300 rounded-lg px-4 py-2 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <button onclick="calculateSquareArea()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Calculate</button>
+            </div>
+            <p class="text-gray-700">Result: <span id="squareResult" class="font-semibold text-blue-500"></span></p>
+        </div>
+
+        <!-- Cube Surface Area Calculator -->
+        <div class="calculator">
+            <h2 class="text-2xl font-bold mb-4 text-gray-700">Cube Surface Area Calculator</h2>
+            <div class="flex items-center mb-2">
+                <input type="number" id="cubeEdge" placeholder="Enter edge length" class="border border-gray-300 rounded-lg px-4 py-2 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <button onclick="calculateCubeSurfaceArea()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Calculate</button>
+            </div>
+            <p class="text-gray-700">Result: <span id="cubeResult" class="font-semibold text-blue-500"></span></p>
+        </div>
+    </div>
+
+    <script>
+        async function calculateSquareArea() {
+            const side = document.getElementById('squareSide').value;
+            try {
+                const response = await fetch('http://INSTANCE1_IP:8080/function/square-area', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ side: Number(side) })
+                });
+                const data = await response.json();
+                document.getElementById('squareResult').textContent = `Area: ${data.area}`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function calculateCubeSurfaceArea() {
+            const edge = document.getElementById('cubeEdge').value;
+            try {
+                const response = await fetch('http://INSTANCE2_IP:8080/function/cube-surface-area', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ edge: Number(edge) })
+                });
+                const data = await response.json();
+                document.getElementById('cubeResult').textContent = `Surface Area: ${data.surfaceArea}`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
